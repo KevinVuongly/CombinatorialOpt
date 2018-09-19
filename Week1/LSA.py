@@ -42,7 +42,6 @@ def pickJob():
 
 def pickMachines():
     x = input("How many identical machines do you want to use? ")
-
     return x
 
 if __name__ == "__main__":
