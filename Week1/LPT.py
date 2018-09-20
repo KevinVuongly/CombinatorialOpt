@@ -1,4 +1,5 @@
 import numpy as np
+import time
 
 def main():
 
@@ -14,37 +15,27 @@ def main():
 
         numberOfMachines = pickMachines()
 
-        machines = [[] for x in range(numberOfMachines)]
-        timeSumMachines = [0 for x in range(numberOfMachines)]
-        jobsInMachine = []
+        machines = [0 for x in range(numberOfMachines)]
+
+        tic = time.time()
 
         for i in range(len(jobs)):
-            put = timeSumMachines.index(min(timeSumMachines))
+            put = machines.index(min(machines))
 
-            machines[put].append(jobs[i])
-            jobsInMachine.append(put)
-            timeSumMachines[put] = sum(machines[put])
+            machines[put] += jobs[i]
 
-    for i in range(len(machines)):
-        print("Timetable of machine {} is {}".format(i, machines[i]))
+        elapsed = time.time()
 
-    positionJob = [[] for x in range(len(jobs))]
-
-    for i in range(len(jobs)):
-        positionJob[i].append(jobs[i])
-        positionJob[i].append(jobsInMachine[i])
-
-    print("\nJobs are in:\n{}".format(np.matrix(positionJob)))
-
-    print("\nLongest machine is {} with duration {}.\n".format(machines.index(max(machines)), sum(max(machines))))
+    print("\nLongest machine is {} with duration {}.\n".format(machines.index(max(machines)), max(machines)))
+    print("Elapsed time:", "%.6f" % float(elapsed))
 
 def pickJob():
     x = input("Which job do you want to schedule? ")
-    return x
+    return int(x)
 
 def pickMachines():
     x = input("How many identical machines do you want to use? ")
-    return x
+    return int(x)
 
 if __name__ == "__main__":
     main()
