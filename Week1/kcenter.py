@@ -18,7 +18,9 @@ def main():
     numberOfE = matrix[0][1]
     k = matrix[0][2]
 
-    graphMatrix = [[101 for x in range(numberOfV)] for y in range(numberOfV)]
+    graphMatrix = [[1001 for x in range(numberOfV)] for y in range(numberOfV)]
+
+    print("[" + (time.strftime("%H:%M:%S")) + "]" + " Creating shortest path matrix...")
 
     for edge in range(numberOfE):
             i = matrix[edge + 1][0]
@@ -30,12 +32,17 @@ def main():
 
     for i in range(numberOfV):
         for j in range(numberOfV):
-            shortestPathMatrix[i][j] = dijkstra(i, j, graphMatrix, numberOfV)
+            if shortestPathMatrix[i][j] == None:
+                shortestPathMatrix[i][j] = dijkstra(i, j, graphMatrix, numberOfV)
+                shortestPathMatrix[j][i] = shortestPathMatrix[i][j]
 
     center = [0]
 
+    print("[" + (time.strftime("%H:%M:%S")) + "]" + " Shortest path matrix finished!\n")
+    print("[" + (time.strftime("%H:%M:%S")) + "]" + " Running greedy k-center algorithm...\n")
+
     for c in range(k - 1):
-        distanceToCenters = [[101 for x in range(numberOfV)] for y in range(len(center))]
+        distanceToCenters = [[1001 for x in range(numberOfV)] for y in range(len(center))]
 
         for i in range(numberOfV):
             if i not in center:
@@ -50,12 +57,12 @@ def main():
                     minDistanceToCenters[j] = distanceToCenters[i][j]
 
         for i in range(numberOfV):
-            if minDistanceToCenters[i] == 101:
+            if minDistanceToCenters[i] == 1001:
                 minDistanceToCenters[i] = 0
 
         center.append(minDistanceToCenters.index(max(minDistanceToCenters)))
 
-    possibleLongestPathsToCenters = [[101 for x in range(numberOfV)] for y in range(len(center))]
+    possibleLongestPathsToCenters = [[1001 for x in range(numberOfV)] for y in range(len(center))]
 
     for i in range(len(center)):
         possibleLongestPathsToCenters[i] = shortestPathMatrix[center[i]]
@@ -72,8 +79,9 @@ def main():
             if longestPathToCenters[j] > possibleLongestPathsToCenters[i][j]:
                 longestPathToCenters[j] = possibleLongestPathsToCenters[i][j]
 
-    print("The maximum distance is: {}".format(max(longestPathToCenters)))
-    print("The following centers: {}".format(center))
+    print("[" + (time.strftime("%H:%M:%S")) + "]" + " Algorithm finished!\n")
+    print("[" + (time.strftime("%H:%M:%S")) + "]" + " The maximum distance is: {}".format(max(longestPathToCenters)))
+    print("[" + (time.strftime("%H:%M:%S")) + "]" + " Centers: {}".format(center))
 
 def pickFile():
     x = input("Which file do you want to use? ")
@@ -81,7 +89,7 @@ def pickFile():
 
 def dijkstra(currentNode, goal, graph, numberOfVertices):
     if currentNode == goal:
-        return 101
+        return 1001
 
     visited = {}
     queue = PriorityQueue()
